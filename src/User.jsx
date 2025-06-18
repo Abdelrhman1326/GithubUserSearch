@@ -2,8 +2,6 @@ import { getUserData } from "./api.js";
 import { useQuery } from "@tanstack/react-query";
 import { FiUsers, FiUserPlus, FiFolder } from "react-icons/fi";
 
-import './App.css';
-
 const User = ({ username }) => {
     const { data, error, isLoading } = useQuery({
         queryKey: ["user", username],
@@ -13,7 +11,7 @@ const User = ({ username }) => {
     });
 
     if (isLoading) return <p>Loading {username}...</p>;
-    if (error) return <p>Error loading {username}</p>;
+    if (error || data?.error) return <p>Error loading {username}</p>;
 
     const user = data.data;
     const joinDate = new Date(user.created_at).toLocaleDateString("en-US", {

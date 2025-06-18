@@ -9,19 +9,26 @@ const github = axios.create({
 
 export async function searchUsers(query) {
     try {
-        const { data } = await github.get(`/search/users?q=${query}`);
-        return { data, error: null };
+        const response = await github.get(`/search/users?q=${query}`);
+        return { data: response.data, error: null };
     } catch (error) {
-        console.log(`Error: ${error.message}`);
-        return { data: null, error: error.message };
+        const status = error.response?.status;
+        if (status === 429 || error.message?.includes("rate limit")) {
+            return { data: null, error: "Rate limit exceeded. Try again later." };
+        }
+        return { data: null, error: error.message || "Something went wrong." };
     }
 }
 
 export async function getUserData(username) {
     try {
-        const { data } = await github.get(`/users/${username}`);
-        return { data, error: null };
+        const response = await github.get(`/users/${username}`);
+        return { data: response.data, error: null };
     } catch (error) {
-        return { data: null, error: error.message };
+        const status = error.response?.status;
+        if (status === 429 || error.message?.includes("rate limit")) {
+            return { data: null, error: "Rate limit exceeded. Try again later." };
+        }
+        return { data: null, error: error.message || "Something went wrong." };
     }
 }

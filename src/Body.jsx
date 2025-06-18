@@ -8,7 +8,7 @@ import './App.css';
 const Body = () => {
     const { search } = useSearch();
 
-    const { data, error, isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["search-users", search],
         queryFn: () => searchUsers(search),
         enabled: search.trim().length > 0,
@@ -17,16 +17,16 @@ const Body = () => {
 
     if (isLoading) {
         return (
-            <div style={{ fontSize: "1.5rem", color: "#434343", textAlign: "center", marginTop: "3rem" }}>
+            <div className="body-container">
                 <p>Loading users...</p>
             </div>
         );
     }
 
-    if (error) {
+    if (data?.error) {
         return (
             <div className="body-container">
-                <p>Error: {error.message}</p>
+                <p style={{ color: "crimson", fontWeight: "bold" }}>{data.error}</p>
             </div>
         );
     }
