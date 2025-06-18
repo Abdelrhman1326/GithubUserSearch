@@ -1,12 +1,9 @@
 import axios from "axios";
 
-const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
-
 const github = axios.create({
     baseURL: "https://api.github.com",
     headers: {
         Accept: "application/vnd.github.v3+json",
-        Authorization: `token ${GITHUB_TOKEN}`,
     },
 });
 
