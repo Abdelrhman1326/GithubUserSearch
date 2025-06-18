@@ -10,8 +10,16 @@ const User = ({ username }) => {
         staleTime: Infinity,
     });
 
-    if (isLoading) return <p>Loading {username}...</p>;
-    if (error || data?.error) return <p>Error loading {username}</p>;
+    if (isLoading) return null;
+
+    // Handle error or rate-limit
+    const errorMsg = data?.error || error?.message || "";
+    if (errorMsg.toLowerCase().includes("rate limit")) {
+        return null; // hide the card completely if rate-limited
+    }
+    if (error || data?.error) {
+        return null; // or optionally: return <></>;
+    }
 
     const user = data.data;
     const joinDate = new Date(user.created_at).toLocaleDateString("en-US", {
